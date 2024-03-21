@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+    <Product Id="*" Name="MSI OM wrapper" Language="1033" Version="1.0.0.0" Manufacturer="company name" UpgradeCode="{A4540658-09B6-46DA-8880-0B1962E06642}">
+        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+        <Media Id="1" Cabinet="myapplication.cab" EmbedCab="yes" />
+
+        <Icon Id="icon.ico" SourceFile="icon.ico" />
+        <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+
+        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+        <Feature Id="ProductFeature" Title="MSI OM wrapper" Level="1">
+            <ComponentGroupRef Id="ProductComponents" />
+            <ComponentRef Id="mysetup" />
+        </Feature>
+
+        <CustomAction Id="mysetup" FileKey="Objets100c_1010.exe" ExeCommand='-s -f1[TempFolder]setup.iss -f2[TempFolder]log.txt' />
+
+        <InstallExecuteSequence>
+            <Custom Action="mysetup" Sequence="5401">NOT Installed</Custom>
+        </InstallExecuteSequence>
+    </Product>
+
+    <!-- <Fragment>
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFilesFolder">
+            <Directory Id="INSTALLFOLDER" Name="My Software" />
+            </Directory>
+        </Directory>
+    </Fragment> -->
+
+    <Fragment>
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="TempFolder" />
+        </Directory>
+    </Fragment>
+
+    <Fragment>
+        <ComponentGroup Id="ProductComponents" Directory="TempFolder">
+            <Component Id="cmpMyTextFileTXT" Guid="{A4540658-09B6-46DA-8880-0B1962E06641}">
+                <File Source="setup.iss" />
+            </Component>
+            <Component Id="mysetup" Guid="{A4540658-09B6-46DA-8880-0B1962E06642}">
+                <File Id="Objets100c_1010.exe" Source="Objets100c_1010.exe" />
+            </Component>
+        </ComponentGroup>
+    </Fragment>
+</Wix>
